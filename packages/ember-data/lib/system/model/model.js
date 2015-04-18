@@ -388,9 +388,8 @@ var Model = Ember.Object.extend(Ember.Evented, {
 
     @event ready
   */
-  ready: function() {
-    this.store.recordArrayManager.recordWasLoaded(this);
-  },
+  ready: Ember.K,
+
   /**
     Fired when the record is loaded from the server.
 

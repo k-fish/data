@@ -204,6 +204,7 @@ Reference.prototype = {
   */
   loadedData: function() {
     this.send('loadedData');
+    this.store.recordArrayManager.recordWasLoaded(this);
   },
 
   /**
@@ -238,6 +239,7 @@ Reference.prototype = {
     this.send('becomeDirty');
     this.updateRecordArraysLater();
   },
+
   /**
     @method send
     @private
