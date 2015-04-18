@@ -2004,9 +2004,16 @@ function normalizeRelationships(store, type, data, record) {
 }
 
 function deserializeRecordId(store, data, key, relationship, id) {
-  if (isNone(id) || id instanceof Model) {
+  if (isNone(id)) {
     return;
   }
+
+  //If record objects were given to push directly, uncommon, not sure whether we should actually support
+  if (id instanceof Model) {
+    data[key] = id.reference;
+    return
+  }
+
   Ember.assert("A " + relationship.parentType + " record was pushed into the store with the value of " + key + " being " + Ember.inspect(id) + ", but " + key + " is a belongsTo relationship so the value must not be an array. You should probably check your data payload or serializer.", !Ember.isArray(id));
 
   var type;
