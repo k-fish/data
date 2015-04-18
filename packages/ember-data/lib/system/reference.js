@@ -37,10 +37,42 @@ var Reference = function(type, id, store, container, data) {
   this.id = id;
   this.store = store;
   this.container = container;
-  this._setup();
   this._data = data || {};
   this.typeKey = type.typeKey;
   this.errors = null;
+  this.dataHasInitialized = false;
+  this._deferredTriggers = [];
+  this._data = {};
+  this._attributes = Ember.create(null);
+  this._inFlightAttributes = Ember.create(null);
+  this._relationships = {};
+  this.currentState = RootState.empty;
+  /*
+    implicit relationships are relationship which have not been declared but the inverse side exists on
+    another record somewhere
+    For example if there was
+    ```
+      App.Comment = DS.Model.extend({
+        name: DS.attr()
+      })
+    ```
+    but there is also
+    ```
+      App.Post = DS.Model.extend({
+        name: DS.attr(),
+        comments: DS.hasMany('comment')
+      })
+    ```
+
+    would have a implicit post relationship in order to be do things like remove ourselves from the post
+    when we are deleted
+  */
+  this._implicitRelationships = Ember.create(null);
+  var model = this;
+  //TODO Move into a getter for better perf
+  this.eachRelationship(function(key, descriptor) {
+    model._relationships[key] = createRelationshipFor(model, descriptor, model.store);
+  });
 };
 
 Reference.prototype = {
@@ -68,40 +100,6 @@ Reference.prototype = {
     //TODO Probably should call deferred triggers here
   },
 
-  _setup: function() {
-    this._deferredTriggers = [];
-    this._data = {};
-    this._attributes = Ember.create(null);
-    this._inFlightAttributes = Ember.create(null);
-    this._relationships = {};
-    this.currentState = RootState.empty;
-    /*
-      implicit relationships are relationship which have not been declared but the inverse side exists on
-      another record somewhere
-      For example if there was
-      ```
-        App.Comment = DS.Model.extend({
-          name: DS.attr()
-        })
-      ```
-      but there is also
-      ```
-        App.Post = DS.Model.extend({
-          name: DS.attr(),
-          comments: DS.hasMany('comment')
-        })
-      ```
-
-      would have a implicit post relationship in order to be do things like remove ourselves from the post
-      when we are deleted
-    */
-    this._implicitRelationships = Ember.create(null);
-    var model = this;
-    //TODO Move into a getter for better perf
-    this.eachRelationship(function(key, descriptor) {
-      model._relationships[key] = createRelationshipFor(model, descriptor, model.store);
-    });
-  },
 
   deleteRecord: function() {
     this.send('deleteRecord');
@@ -172,6 +170,18 @@ Reference.prototype = {
     if (this.record) {
       this.record._notifyProperties(changedKeys);
     }
+    this.didIinitalizeData();
+  },
+
+
+  didIinitalizeData: function() {
+    if (!this.dataHasInitialized) {
+      var self = this;
+      Ember.run.schedule('actions', function() {
+         self.store.recordArrayManager.recordWasLoaded(self);
+      });
+      this.dataHasInitialized = true;
+    }
   },
 
   destroy: function() {
@@ -203,8 +213,7 @@ Reference.prototype = {
   */
   loadedData: function() {
     this.send('loadedData');
-    var self = this;
-    Ember.run.schedule('actions', function() { self.store.recordArrayManager.recordWasLoaded(self); });
+    this.didIinitalizeData();
   },
 
   /**
