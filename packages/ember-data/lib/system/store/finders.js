@@ -112,7 +112,8 @@ export function _findBelongsTo(adapter, store, record, link, relationship) {
       }
 
       var record = store.push(relationship.type, payload);
-      return record;
+      //TODO Optimize
+      return record.reference;
     });
   }, null, "DS: Extract payload of " + record + " : " + relationship.type);
 }
