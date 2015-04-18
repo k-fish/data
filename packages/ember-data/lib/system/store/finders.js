@@ -27,7 +27,9 @@ export function _find(adapter, store, type, id, record) {
     return store._adapterRun(function() {
       var payload = serializer.extract(store, type, adapterPayload, id, 'find');
 
-      return store.push(type, payload);
+      //TODO Optimize
+      var record = store.push(type, payload);
+      return record.reference;
     });
   }, function(error) {
     var record = store.getById(type, id);

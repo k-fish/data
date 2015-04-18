@@ -92,6 +92,10 @@ function promiseRecord(reference, label) {
   var toReturn = reference;
   if (!reference.then) {
     toReturn = reference.getRecord();
+  } else {
+    toReturn = reference.then(function(ref) {
+      return ref.getRecord();
+    });
   }
   return promiseObject(toReturn, label);
 }
