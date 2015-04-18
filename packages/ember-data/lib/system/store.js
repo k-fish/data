@@ -1767,40 +1767,6 @@ Store = Service.extend({
     @param {Object} data
     @return {DS.Model} record
   */
-  _buildRecord: function(type, id, data) {
-    var typeMap = this.typeMapFor(type);
-    var idToRecord = typeMap.idToRecord;
-
-    Ember.assert('The id ' + id + ' has already been used with another record of type ' + type.toString() + '.', !id || !idToRecord[id]);
-    Ember.assert("`" + Ember.inspect(type)+ "` does not appear to be an ember-data model", (typeof type._create === 'function') );
-
-
-    if (data) {
-      record.setupData(data);
-    }
-
-    // if we're creating an item, this process will be done
-    // later, once the object has been persisted.
-    if (id) {
-      idToRecord[id] = record;
-    }
-
-    typeMap.records.push(record);
-
-    return record;
-  },
-
-  /**
-    Build a brand new record for a given type, ID, and
-    initial data.
-
-    @method buildRecord
-    @private
-    @param {subclass of DS.Model} type
-    @param {String} id
-    @param {Object} data
-    @return {DS.Model} record
-  */
   buildReference: function(type, id, data) {
     var typeMap = this.typeMapFor(type);
     var idToRecord = typeMap.idToRecord;
