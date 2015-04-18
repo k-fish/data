@@ -63,6 +63,7 @@ Reference.prototype = {
       container: this.container,
     });
     this.record.reference = this;
+    //TODO Probably should call deferred triggers here
   },
 
   _setup: function() {

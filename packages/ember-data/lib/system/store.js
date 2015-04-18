@@ -694,7 +694,8 @@ Store = Service.extend({
   },
 
   scheduleFetchMany: function(records) {
-    return Promise.all(map(records, this.scheduleFetch, this));
+    var references = map(records, function(record) { return record.reference; });
+    return Promise.all(map(references, this.scheduleFetch, this));
   },
 
   scheduleFetch: function(record) {
@@ -895,17 +896,8 @@ Store = Service.extend({
     @param {String|Integer} id
     @return {DS.Model} record
   */
-  _recordForId: function(typeName, inputId) {
-    var type = this.modelFor(typeName);
-    var id = coerceId(inputId);
-    var idToRecord = this.typeMapFor(type).idToRecord;
-    var record = idToRecord[id];
-
-    if (!record || !idToRecord[id]) {
-      record = this.buildRecord(type, id);
-    }
-
-    return record;
+  recordForId: function(typeName, id) {
+    return this.referenceForId(typeName, id).getRecord();
   },
 
   referenceForId: function(typeName, inputId) {
