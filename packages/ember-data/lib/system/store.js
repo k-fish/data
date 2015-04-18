@@ -798,7 +798,7 @@ Store = Service.extend({
       var snapshots = Ember.A(records).invoke('_createSnapshot');
       var groups = adapter.groupRecordsForFindMany(this, snapshots);
       forEach(groups, function (groupOfSnapshots) {
-        var groupOfRecords = Ember.A(groupOfSnapshots).mapBy('record');
+        var groupOfRecords = Ember.A(groupOfSnapshots).mapBy('record.reference');
         var requestedRecords = Ember.A(groupOfRecords);
         var ids = requestedRecords.mapBy('id');
         if (ids.length > 1) {
