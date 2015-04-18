@@ -3,6 +3,7 @@ import RootState from "ember-data/system/model/states";
 import createRelationshipFor from "ember-data/system/relationships/state/create";
 import Snapshot from "ember-data/system/snapshot";
 import { PromiseObject } from "ember-data/system/promise-proxies";
+import Errors from "ember-data/system/model/errors";
 
 var Promise = Ember.RSVP.Promise;
 var get = Ember.get;
@@ -39,6 +40,7 @@ var Reference = function(type, id, store, container, data) {
   this._setup();
   this._data = data || {};
   this.typeKey = type.typeKey;
+  this.errors = null;
 };
 
 Reference.prototype = {
@@ -556,6 +558,22 @@ Reference.prototype = {
 
     Ember.run.schedule('actions', this, this.updateRecordArrays);
   },
+
+  getErrors: function() {
+    if (this.errors) {
+      return this.errors;
+    }
+    var errors = Errors.create();
+
+    errors.registerHandlers(this, function() {
+      this.send('becameInvalid');
+    }, function() {
+      this.send('becameValid');
+    });
+
+    this.errors = errors;
+    return errors;
+  },
   // FOR USE DURING COMMIT PROCESS
 
   /**
@@ -563,7 +581,7 @@ Reference.prototype = {
     @private
   */
   adapterDidInvalidate: function(errors) {
-    var recordErrors = get(this, 'errors');
+    var recordErrors = this.getErrors();
     for (var key in errors) {
       if (!errors.hasOwnProperty(key)) {
         continue;

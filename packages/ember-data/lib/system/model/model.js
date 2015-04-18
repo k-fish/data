@@ -1,4 +1,3 @@
-import Errors from "ember-data/system/model/errors";
 import { PromiseObject } from "ember-data/system/promise-proxies";
 import JSONSerializer from "ember-data/serializers/json-serializer";
 import Snapshot from "ember-data/system/snapshot";
@@ -18,33 +17,6 @@ var retrieveFromCurrentState = Ember.computed('currentState', function(key) {
   return get(this.reference.currentState, key);
 }).readOnly();
 
-
-// Like Ember.merge, but instead returns a list of keys
-// for values that fail a strict equality check
-// instead of the original object.
-function mergeAndReturnChangedKeys(original, updates) {
-  var changedKeys = [];
-
-  if (!updates || typeof updates !== 'object') {
-    return changedKeys;
-  }
-
-  var keys   = Ember.keys(updates);
-  var length = keys.length;
-  var i, val, key;
-
-  for (i = 0; i < length; i++) {
-    key = keys[i];
-    val = updates[key];
-
-    if (original[key] !== val) {
-      changedKeys.push(key);
-    }
-
-    original[key] = val;
-  }
-  return changedKeys;
-}
 
 /**
 
@@ -367,15 +339,7 @@ var Model = Ember.Object.extend(Ember.Evented, {
     @type {DS.Errors}
   */
   errors: Ember.computed(function() {
-    var errors = Errors.create();
-
-    errors.registerHandlers(this, function() {
-      this.send('becameInvalid');
-    }, function() {
-      this.send('becameValid');
-    });
-
-    return errors;
+    return this.reference.getErrors();
   }).readOnly(),
 
   /**

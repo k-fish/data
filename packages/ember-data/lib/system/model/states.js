@@ -329,7 +329,7 @@ var DirtyState = {
     },
 
     didSetProperty: function(record, context) {
-      get(record, 'errors').remove(context.name);
+      record.getErrors().remove(context.name);
 
       didSetProperty(record, context);
     },
@@ -337,12 +337,12 @@ var DirtyState = {
     becomeDirty: Ember.K,
 
     willCommit: function(record) {
-      get(record, 'errors').clear();
+      record.getErrors().clear();
       record.transitionTo('inFlight');
     },
 
     rolledBack: function(record) {
-      get(record, 'errors').clear();
+      record.getErrors().clear();
       record.triggerLater('ready');
     },
 
@@ -699,7 +699,7 @@ var RootState = {
       isValid: false,
 
       didSetProperty: function(record, context) {
-        get(record, 'errors').remove(context.name);
+        record.getErrors().remove(context.name);
 
         didSetProperty(record, context);
       },
@@ -710,7 +710,7 @@ var RootState = {
 
 
       rolledBack: function(record) {
-        get(record, 'errors').clear();
+        record.getErrors().clear();
         record.transitionTo('loaded.saved');
         record.triggerLater('ready');
       },
