@@ -337,6 +337,10 @@ Reference.prototype = {
     }
 
     set(this, 'currentState', state);
+    //TODO Consider whether this is the best approach for keeping these two in sync
+    if (this.record) {
+      set(this.record, 'currentState', state);
+    }
 
     for (i=0, l=setups.length; i<l; i++) {
       setups[i].setup(this);
