@@ -379,6 +379,11 @@ Reference.prototype = {
 
   //TODO double check whether we care about having the record
   _triggerDeferredTriggers: function() {
+    //TODO Worry about didLoad etc. that people might be defining/using
+    //Queue up, to be ran once there is a record
+    if (!this.record) {
+      return;
+    }
     for (var i=0, l= this._deferredTriggers.length; i<l; i++) {
       this.record.trigger.apply(this.record, this._deferredTriggers[i]);
     }
