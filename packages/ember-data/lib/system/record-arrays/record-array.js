@@ -194,7 +194,7 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
   _dissociateFromOwnRecords: function() {
     var array = this;
 
-    this.forEach(function(record) {
+    this.get('content').forEach(function(record) {
       var recordArrays = record._recordArrays;
 
       if (recordArrays) {
