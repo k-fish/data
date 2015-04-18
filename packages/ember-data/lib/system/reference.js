@@ -71,7 +71,7 @@ Reference.prototype = {
     this._attributes = Ember.create(null);
     this._inFlightAttributes = Ember.create(null);
     this._relationships = {};
-    this.currentState = RootState.empty,
+    this.currentState = RootState.empty;
     /*
       implicit relationships are relationship which have not been declared but the inverse side exists on
       another record somewhere
@@ -483,9 +483,13 @@ Reference.prototype = {
     this._relationships[key].setRecord(recordToSet);
   },
 
+  //TODO Rename to reference
   _convertStringOrNumberIntoRecord: function(value, type) {
     if (Ember.typeOf(value) === 'string' || Ember.typeOf(value) === 'number') {
       return this.store.referenceForId(type, value);
+    }
+    if (value.reference) {
+      return value.reference;
     }
     return value;
   },
