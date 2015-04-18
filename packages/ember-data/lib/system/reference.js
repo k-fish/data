@@ -100,7 +100,6 @@ Reference.prototype = {
     //TODO Move into a getter for better perf
     this.eachRelationship(function(key, descriptor) {
       model._relationships[key] = createRelationshipFor(model, descriptor, model.store);
-      //model._relationships[key] = createRelationshipFor(model, descriptor, model.store);
     });
   },
 
@@ -204,7 +203,8 @@ Reference.prototype = {
   */
   loadedData: function() {
     this.send('loadedData');
-    this.store.recordArrayManager.recordWasLoaded(this);
+    var self = this;
+    Ember.run.schedule('actions', function() { self.store.recordArrayManager.recordWasLoaded(self); });
   },
 
   /**

@@ -347,11 +347,10 @@ Store = Service.extend({
     record.setProperties(properties);
 
     //TODO Bring baaaaack
-    /*
-    record.eachRelationship(function(key, descriptor) {
-      record._relationships[key].setHasData(true);
+    reference.eachRelationship(function(key, descriptor) {
+      reference._relationships[key].setHasData(true);
     });
-   */
+
     return record;
   },
 
@@ -2011,7 +2010,7 @@ function deserializeRecordId(store, data, key, relationship, id) {
   //If record objects were given to push directly, uncommon, not sure whether we should actually support
   if (id instanceof Model) {
     data[key] = id.reference;
-    return
+    return;
   }
 
   Ember.assert("A " + relationship.parentType + " record was pushed into the store with the value of " + key + " being " + Ember.inspect(id) + ", but " + key + " is a belongsTo relationship so the value must not be an array. You should probably check your data payload or serializer.", !Ember.isArray(id));
