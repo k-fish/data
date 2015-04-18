@@ -56,7 +56,7 @@ export default Ember.Object.extend({
   */
   updateRecordArrays: function() {
     forEach(this.changedRecords, function(record) {
-      if (get(record, 'isDeleted')) {
+      if (record.isDeleted()) {
         this._recordWasDeleted(record);
       } else {
         this._recordWasChanged(record);
@@ -155,7 +155,7 @@ export default Ember.Object.extend({
     for (var i = 0, l = records.length; i < l; i++) {
       record = records[i];
 
-      if (!get(record, 'isDeleted') && !get(record, 'isEmpty')) {
+      if (!record.isDeleted() && !record.isEmpty()) {
         this.updateRecordArray(array, filter, type, record);
       }
     }

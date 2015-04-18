@@ -412,11 +412,6 @@ var Model = Ember.Object.extend(Ember.Evented, {
   */
   didCreate: Ember.K,
 
-  //TODODODODOD remove
-  clearRelationships: Ember.K,
-  updateRecordArrays: Ember.K,
-  updateRecordArraysLater: Ember.K,
-
   /**
     Fired when the record is deleted.
 
@@ -764,7 +759,8 @@ var Model = Ember.Object.extend(Ember.Evented, {
 
   willDestroy: function() {
     this._super.apply(this, arguments);
-    this.clearRelationships();
+    //TODO Move!
+    this.reference.clearRelationships();
   },
 
   // This is a temporary solution until we refactor DS.Model to not
