@@ -81,7 +81,7 @@ export default Ember.Object.extend({
 
   //Don't need to update non filtered arrays on simple changes
   _recordWasChanged: function (record) {
-    var type = record.constructor;
+    var type = record.type;
     var recordArrays = this.filteredRecordArrays.get(type);
     var filter;
 
@@ -95,7 +95,7 @@ export default Ember.Object.extend({
 
   //Need to update live arrays on loading
   recordWasLoaded: function(record) {
-    var type = record.constructor;
+    var type = record.type;
     var recordArrays = this.filteredRecordArrays.get(type);
     var filter;
 
@@ -119,7 +119,7 @@ export default Ember.Object.extend({
     if (!filter) {
       shouldBeInArray = true;
     } else {
-      shouldBeInArray = filter(record);
+      shouldBeInArray = filter(record.getRecord());
     }
 
     var recordArrays = this.recordArraysForRecord(record);

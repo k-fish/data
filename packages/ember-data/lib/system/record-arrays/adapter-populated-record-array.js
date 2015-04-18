@@ -4,7 +4,6 @@ import RecordArray from "ember-data/system/record-arrays/record-array";
 */
 
 var get = Ember.get;
-var map = Ember.ArrayPolyfills.map;
 
 function cloneNull(source) {
   var clone = Ember.create(null);
