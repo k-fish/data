@@ -88,7 +88,7 @@ ManyRelationship.prototype.removeRecordFromOwn = function(record, idx) {
 ManyRelationship.prototype.notifyRecordRelationshipAdded = function(record, idx) {
   var type = this.relationshipMeta.type;
   //TODO GAAAAAA, we need to do a subclass check here insted of instance of
-  Ember.assert("You cannot add '" + record.constructor.typeKey + "' records to the " + this.record.constructor.typeKey + "." + this.key + " relationship (only '" + this.belongsToType.typeKey + "' allowed)", (function () {
+  Ember.assert("You cannot add '" + record.type.typeKey + "' records to the " + this.record.type.typeKey + "." + this.key + " relationship (only '" + this.belongsToType.typeKey + "' allowed)", (function () {
     if (type.__isMixin) {
       return type.__mixin.detect(record.record);
     }
