@@ -1388,7 +1388,7 @@ Store = Service.extend({
 
     this.typeMapFor(record.type).idToRecord[id] = record;
 
-    set(record, 'id', id);
+    record.setId(id);
   },
 
   /**

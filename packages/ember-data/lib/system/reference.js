@@ -512,6 +512,12 @@ Reference.prototype = {
     this.store.dataWasUpdated(this.type, this);
   },
 
+  setId: function(id) {
+    this.id = id;
+    //TODO figure out whether maybe we should proxy
+    set(this.record, 'id', id);
+  },
+
   /**
     If the adapter did not return a hash in response to a commit,
     merge the changed attributes and relationships into the existing
