@@ -61,7 +61,9 @@ export function _findMany(adapter, store, type, ids, records) {
 
       Ember.assert("The response from a findMany must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
-      return store.pushMany(type, payload);
+      //TODO Optimize, no need to materialize here
+      var records = store.pushMany(type, payload);
+      return map(records, function(record) { return record.reference; });
     });
   }, null, "DS: Extract payload of " + type);
 }

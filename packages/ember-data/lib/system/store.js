@@ -699,7 +699,6 @@ Store = Service.extend({
   },
 
   scheduleFetch: function(record) {
-    var type = record.type;
     if (isNone(record)) { return null; }
     if (record._loadingPromise) { return record._loadingPromise; }
 
@@ -712,6 +711,7 @@ Store = Service.extend({
 
     record.loadingData(promise);
 
+    var type = record.type;
     if (!this._pendingFetch.get(type)) {
       this._pendingFetch.set(type, [recordResolverPair]);
     } else {
