@@ -165,9 +165,11 @@ Reference.prototype = {
   },
 
   setupData: function(data) {
-    //var changedKeys = mergeAndReturnChangedKeys(this._data, data);
-    mergeAndReturnChangedKeys(this._data, data);
+    var changedKeys = mergeAndReturnChangedKeys(this._data, data);
     this.pushedData();
+    if (this.record) {
+      this.record._notifyProperties(changedKeys);
+    }
   },
 
   destroy: function() {
