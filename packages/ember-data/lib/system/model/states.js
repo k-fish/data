@@ -3,7 +3,6 @@
 */
 
 var get = Ember.get;
-var set = Ember.set;
 /*
   This file encapsulates the various states that a record can transition
   through during its lifecycle.

@@ -1,13 +1,11 @@
 import { PromiseObject } from "ember-data/system/promise-proxies";
 import JSONSerializer from "ember-data/serializers/json-serializer";
-import Snapshot from "ember-data/system/snapshot";
 
 /**
   @module ember-data
 */
 
 var get = Ember.get;
-var set = Ember.set;
 var intersection = Ember.EnumerableUtils.intersection;
 var RESERVED_MODEL_PROPS = [
   'currentState', 'data', 'store'
