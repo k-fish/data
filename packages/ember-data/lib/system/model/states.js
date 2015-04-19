@@ -291,9 +291,7 @@ var DirtyState = {
     becomeDirty: Ember.K,
     pushedData: Ember.K,
 
-    unloadRecord: function(record) {
-      Ember.assert("You can only unload a record which is not inFlight. `" + Ember.inspect(record) + " `", false);
-    },
+    unloadRecord: assertAgainstUnloadRecord,
 
     // TODO: More robust semantics around save-while-in-flight
     willCommit: Ember.K,
@@ -426,7 +424,7 @@ createdState.uncommitted.pushedData = function(record) {
 createdState.uncommitted.propertyWasReset = Ember.K;
 
 function assertAgainstUnloadRecord(record) {
-  Ember.assert("You can only unload a record which is not inFlight. `" + Ember.inspect(record) + "`", false);
+  Ember.assert("You can only unload a record which is not inFlight. `" + Ember.inspect(record.record) + "`", false);
 }
 
 updatedState.inFlight.unloadRecord = assertAgainstUnloadRecord;
