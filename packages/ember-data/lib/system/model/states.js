@@ -511,7 +511,8 @@ var RootState = {
       record.transitionTo('loaded.saved');
       record.triggerLater('didLoad');
       record.triggerLater('ready');
-      set(record, 'isError', false);
+      //TODO this seems out of place here
+      record.didCleanError();
     },
 
     becameError: function(record) {

@@ -86,7 +86,6 @@ Reference.prototype = {
   isValid: retrieveFromCurrentState('isValid'),
   dirtyType: retrieveFromCurrentState('dirtyType'),
 
-
   constructor: Reference,
   materializeRecord: function() {
     // lookupFactory should really return an object that creates
@@ -128,14 +127,11 @@ Reference.prototype = {
     }, promiseLabel).then(function() {
       //TODO FIXMEMEMEMEME
       record.record.set('isReloading', false);
-      record.record.set('isError', false);
       record.isReloading = false;
-      record.isError = false;
+      record.didCleanError();
       return record;
     }, function(reason) {
-      record.record.set('isError', true);
-      record.isError = true;
-      throw reason;
+      this.didError();
     }, "DS: Model#reload complete, update flags")['finally'](function () {
       record.updateRecordArrays();
     });
@@ -295,7 +291,7 @@ Reference.prototype = {
 
     if (get(this, 'isError')) {
       this._inFlightAttributes = Ember.create(null);
-      set(this, 'isError', false);
+      this.didCleanError();
     }
 
     //Eventually rollback will always work for relationships
@@ -531,6 +527,19 @@ Reference.prototype = {
     set(this.record, 'id', id);
   },
 
+  didError: function() {
+    this.isError = true;
+    if (this.record) {
+      this.record.set('isError', true);
+    }
+  },
+
+  didCleanError: function() {
+    this.isError = false;
+    if (this.record) {
+      this.record.set('isError', false);
+    }
+  },
   /**
     If the adapter did not return a hash in response to a commit,
     merge the changed attributes and relationships into the existing
@@ -540,7 +549,7 @@ Reference.prototype = {
   */
   adapterDidCommit: function(data) {
     var changedKeys;
-    set(this, 'isError', false);
+    this.didCleanError();
 
     if (data) {
       changedKeys = mergeAndReturnChangedKeys(this._data, data);
@@ -608,7 +617,7 @@ Reference.prototype = {
   */
   adapterDidError: function() {
     this.send('becameError');
-    set(this, 'isError', true);
+    this.didError();
     this._saveWasRejected();
   },
 
