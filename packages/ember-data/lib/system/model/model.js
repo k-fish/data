@@ -622,22 +622,6 @@ var Model = Ember.Object.extend(Ember.Evented, {
 
 
 
-/*
-  /**
-    @method setupData
-    @private
-    @param {Object} data
-  setupData: function(data) {
-    Ember.assert("Expected an object as `data` in `setupData`", Ember.typeOf(data) === 'object');
-
-    var changedKeys = mergeAndReturnChangedKeys(this._data, data);
-
-    this.pushedData();
-
-    this._notifyProperties(changedKeys);
-  },
-  */
-
   /**
     If the model `isDirty` this function will discard any unsaved
     changes

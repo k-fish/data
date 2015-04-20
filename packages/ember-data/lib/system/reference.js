@@ -93,7 +93,7 @@ Reference.prototype = {
     this.record = this.type._create({
       id: this.id,
       store: this.store,
-      container: this.container,
+      container: this.container
     });
     this.record.reference = this;
     //TODO Probably should call deferred triggers here
@@ -187,11 +187,10 @@ Reference.prototype = {
     this.didIinitalizeData();
   },
 
-
   becameReady: function() {
     var self = this;
     Ember.run.schedule('actions', function() {
-       self.store.recordArrayManager.recordWasLoaded(self);
+      self.store.recordArrayManager.recordWasLoaded(self);
     });
   },
 
@@ -599,7 +598,6 @@ Reference.prototype = {
     // quick hack (something like this could be pushed into run.once
     if (this._updatingRecordArraysLater) { return; }
     this._updatingRecordArraysLater = true;
-
     Ember.run.schedule('actions', this, this.updateRecordArrays);
   },
 
@@ -653,7 +651,7 @@ Reference.prototype = {
       }
     }
     this._inFlightAttributes = Ember.create(null);
-  },
+  }
 };
 
 // Like Ember.merge, but instead returns a list of keys

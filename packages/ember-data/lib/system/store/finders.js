@@ -31,10 +31,10 @@ export function _find(adapter, store, type, id, record) {
       return record.reference;
     });
   }, function(error) {
-      record.notFound();
-      if (record.isEmpty()) {
-        record.unloadRecord();
-      }
+    record.notFound();
+    if (record.isEmpty()) {
+      record.unloadRecord();
+    }
     throw error;
   }, "DS: Extract payload of '" + type + "'");
 }
