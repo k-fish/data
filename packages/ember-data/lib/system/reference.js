@@ -117,9 +117,22 @@ Reference.prototype = {
     });
   },
 
-  reload: function() {
-    set(this, 'isReloading', true);
+  startedReloading: function() {
+    this.isReloading = true;
+    if (this.record) {
+      set(this.record, 'isReloading', true);
+    }
+  },
 
+  finishedReloading: function() {
+    this.isReloading = false;
+    if (this.record) {
+      set(this.record, 'isReloading', false);
+    }
+  },
+
+  reload: function() {
+    this.startedReloading();
     var record = this;
     var promiseLabel = "DS: Model#reload of " + this;
     return new Promise(function(resolve) {
@@ -127,13 +140,13 @@ Reference.prototype = {
     }, promiseLabel).then(function() {
       //TODO FIXMEMEMEMEME
       record.record.set('isReloading', false);
-      record.isReloading = false;
       record.didCleanError();
       return record;
     }, function(reason) {
       record.didError();
       throw reason;
     }, "DS: Model#reload complete, update flags")['finally'](function () {
+      record.finishedReloading();
       record.updateRecordArrays();
     });
   },
