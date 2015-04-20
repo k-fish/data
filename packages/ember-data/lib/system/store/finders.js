@@ -9,7 +9,6 @@ import {
 } from "ember-data/system/store/serializers";
 
 
-var get = Ember.get;
 var Promise = Ember.RSVP.Promise;
 var map = Ember.EnumerableUtils.map;
 
@@ -32,13 +31,10 @@ export function _find(adapter, store, type, id, record) {
       return record.reference;
     });
   }, function(error) {
-    var record = store.getById(type, id);
-    if (record) {
       record.notFound();
-      if (get(record, 'isEmpty')) {
-        store.unloadRecord(record);
+      if (record.isEmpty()) {
+        record.unloadRecord();
       }
-    }
     throw error;
   }, "DS: Extract payload of '" + type + "'");
 }

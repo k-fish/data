@@ -131,7 +131,8 @@ Reference.prototype = {
       record.didCleanError();
       return record;
     }, function(reason) {
-      this.didError();
+      record.didError();
+      throw reason;
     }, "DS: Model#reload complete, update flags")['finally'](function () {
       record.updateRecordArrays();
     });
