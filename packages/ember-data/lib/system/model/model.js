@@ -591,8 +591,8 @@ var Model = Ember.Object.extend(Ember.Evented, {
       and value is an [oldProp, newProp] array.
   */
   changedAttributes: function() {
-    var oldData = get(this, '_data');
-    var newData = get(this, '_attributes');
+    var oldData = get(this.reference, '_data');
+    var newData = get(this.reference, '_attributes');
     var diffData = {};
     var prop;
 

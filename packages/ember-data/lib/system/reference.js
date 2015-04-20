@@ -171,12 +171,16 @@ Reference.prototype = {
   },
 
 
+  becameReady: function() {
+    var self = this;
+    Ember.run.schedule('actions', function() {
+       self.store.recordArrayManager.recordWasLoaded(self);
+    });
+  },
+
   didIinitalizeData: function() {
     if (!this.dataHasInitialized) {
-      var self = this;
-      Ember.run.schedule('actions', function() {
-         self.store.recordArrayManager.recordWasLoaded(self);
-      });
+      this.becameReady();
       this.dataHasInitialized = true;
     }
   },
@@ -299,6 +303,8 @@ Reference.prototype = {
     //For now we support it only out of deleted state, because we
     //have an explicit way of knowing when the server acked the relationship change
     if (this.isDeleted()) {
+      //TODO: Should probably move this to the state machine somehow
+      this.becameReady();
       this.reconnectRelationships();
     }
 
