@@ -65,12 +65,13 @@ BelongsToRelationship.prototype.addRecord = function(newRecord) {
   //TODO GAAAAAA, we need to do a subclass check here insted of instance of
   Ember.assert("You cannot add a '" + newRecord.type.typeKey + "' record to the '" + this.record.type.typeKey + "." + this.key +"'. " + "You can only add a '" + type.typeKey + "' record to this relationship.", (function () {
     if (type.__isMixin) {
-      return type.__mixin.detect(newRecord.record);
+      //TODO What am I doing here, ask Stef/Wycats what to do
+      return type.__mixin.detect(newRecord.type.PrototypeMixin);
     }
     if (Ember.MODEL_FACTORY_INJECTIONS) {
       type = type.superclass;
     }
-    return newRecord.record instanceof type;
+    return type.detect(newRecord.type);
   })());
 
   if (this.inverseRecord) {

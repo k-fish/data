@@ -90,12 +90,13 @@ ManyRelationship.prototype.notifyRecordRelationshipAdded = function(record, idx)
   //TODO GAAAAAA, we need to do a subclass check here insted of instance of
   Ember.assert("You cannot add '" + record.type.typeKey + "' records to the " + this.record.type.typeKey + "." + this.key + " relationship (only '" + this.belongsToType.typeKey + "' allowed)", (function () {
     if (type.__isMixin) {
-      return type.__mixin.detect(record.record);
+      //TODO What am I doing here, ask Stef/Wycats what to do
+      return type.__mixin.detect(record.type.PrototypeMixin);
     }
     if (Ember.MODEL_FACTORY_INJECTIONS) {
       type = type.superclass;
     }
-    return record.record instanceof type;
+    return type.detect(record.type);
   })());
 
   this.record.notifyHasManyAdded(this.key, record, idx);
