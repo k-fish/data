@@ -149,7 +149,7 @@ export default Ember.Object.extend(Ember.MutableArray, Ember.Evented, {
     var records;
     if (amt > 0) {
       records = this.currentState.slice(idx, idx+amt);
-      this.get('relationship').removeRecords(map(records, function(rec) { return rec.reference;}));
+      this.get('relationship').removeRecords(records);
     }
     if (objects) {
       this.get('relationship').addRecords(map(objects, function(obj) { return obj.reference; }), idx);
