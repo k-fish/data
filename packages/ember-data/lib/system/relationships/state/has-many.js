@@ -185,7 +185,7 @@ ManyRelationship.prototype.getRecords = function() {
       promise: promise
     });
   } else {
-    Ember.assert("You looked up the '" + this.key + "' relationship on a '" + this.record.constructor.typeKey + "' with id " + this.record.id +  " but some of the associated records were not loaded. Either make sure they are all loaded together with the parent record, or specify that the relationship is async (`DS.hasMany({ async: true })`)", this.manyArray.isEvery('isEmpty', false));
+    Ember.assert("You looked up the '" + this.key + "' relationship on a '" + this.record.type.typeKey + "' with id " + this.record.id +  " but some of the associated records were not loaded. Either make sure they are all loaded together with the parent record, or specify that the relationship is async (`DS.hasMany({ async: true })`)", this.manyArray.isEvery('isEmpty', false));
 
     //TODO(Igor) WTF DO I DO HERE?
     if (!this.manyArray.get('isDestroyed')) {
