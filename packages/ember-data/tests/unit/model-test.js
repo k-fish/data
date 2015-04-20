@@ -396,15 +396,15 @@ test("setting a property back to its original value removes the property from th
 
   run(function() {
     store.find(Person, 1).then(function(person) {
-      equal(person._attributes.name, undefined, "the `_attributes` hash is clean");
+      equal(person.reference._attributes.name, undefined, "the `_attributes` hash is clean");
 
       set(person, 'name', "Niceguy Dale");
 
-      equal(person._attributes.name, "Niceguy Dale", "the `_attributes` hash contains the changed value");
+      equal(person.reference._attributes.name, "Niceguy Dale", "the `_attributes` hash contains the changed value");
 
       set(person, 'name', "Scumbag Dale");
 
-      equal(person._attributes.name, undefined, "the `_attributes` hash is reset");
+      equal(person.reference._attributes.name, undefined, "the `_attributes` hash is reset");
     });
   });
 });
