@@ -1217,8 +1217,7 @@ Store = Service.extend({
     @return {boolean}
   */
   recordIsLoaded: function(type, id) {
-    if (!this.hasRecordForId(type, id)) { return false; }
-    return this.referenceForId(type, id).isEmpty();
+    return this.hasRecordForId(type, id);
   },
 
   /**
