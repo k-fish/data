@@ -1436,10 +1436,8 @@ Store = Service.extend({
     var reference = this.referenceForId(type, id);
 
     reference.setupData(data);
-    //var record = reference.getRecord();
 
-    //TODO(ref): put back
-    //this.recordArrayManager.recordDidChange(record);
+    this.recordArrayManager.recordDidChange(reference);
 
     return reference;
   },
