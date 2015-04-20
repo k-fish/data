@@ -755,9 +755,11 @@ var Model = Ember.Object.extend(Ember.Evented, {
   },
 
   willDestroy: function() {
-    this._super.apply(this, arguments);
     //TODO Move!
     this.reference.clearRelationships();
+    this.reference.recordObjectWillDestroy();
+    this._super.apply(this, arguments);
+    //TODO should we set reference to null here?
   },
 
   // This is a temporary solution until we refactor DS.Model to not

@@ -99,6 +99,10 @@ Reference.prototype = {
     //TODO Probably should call deferred triggers here
   },
 
+  recordObjectWillDestroy: function() {
+    this.record = null;
+  },
+
 
   deleteRecord: function() {
     this.send('deleteRecord');
