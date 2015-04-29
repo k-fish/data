@@ -137,17 +137,14 @@ var ActiveModelSerializer = RESTSerializer.extend({
   serializeHasMany: Ember.K,
 
   /**
-    Underscores the JSON root keys when serializing.
+   Underscores the JSON root keys when serializing.
 
-    @method serializeIntoHash
-    @param {Object} hash
-    @param {subclass of DS.Model} typeClass
-    @param {DS.Snapshot} snapshot
-    @param {Object} options
+    @method payloadKeyFromModelName
+    @param {String} modelName
+    @returns {String}
   */
-  serializeIntoHash: function(data, typeClass, snapshot, options) {
-    var root = underscore(decamelize(typeClass.typeKey));
-    data[root] = this.serialize(snapshot, options);
+  payloadKeyFromModelName: function(modelName) {
+    return underscore(decamelize(modelName));
   },
 
   /**
@@ -268,11 +265,11 @@ var ActiveModelSerializer = RESTSerializer.extend({
           payloadKey = this.keyForAttribute(key, "deserialize");
           payload = hash[payloadKey];
           if (payload && payload.type) {
-            payload.type = this.typeForRoot(payload.type);
+            payload.type = this.modelNameFromPayloadKey(payload.type);
           } else if (payload && relationship.kind === "hasMany") {
             var self = this;
             forEach(payload, function(single) {
-              single.type = self.typeForRoot(single.type);
+              single.type = self.modelNameFromPayloadKey(single.type);
             });
           }
         } else {
@@ -289,7 +286,7 @@ var ActiveModelSerializer = RESTSerializer.extend({
       }, this);
     }
   },
-  typeForRoot: function(key) {
+  modelNameFromPayloadKey: function(key) {
     return camelize(singularize(key)).replace(/(^|\:)([A-Z])/g, function(match, separator, chr) {
       return match.toLowerCase();
     }).replace('::', '/');

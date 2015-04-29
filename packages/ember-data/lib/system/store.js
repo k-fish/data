@@ -1944,7 +1944,7 @@ Store = Service.extend({
 
   /**
     All typeKeys are camelCase internally. Changing this function may
-    require changes to other normalization hooks (such as typeForRoot).
+    require changes to other normalization hooks (such as payloadKeyFromModelName).
 
     @method _normalizeTypeKey
     @private
