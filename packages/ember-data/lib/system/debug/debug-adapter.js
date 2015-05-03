@@ -43,7 +43,13 @@ export default Ember.DataAdapter.extend({
   },
 
   getRecords: function(typeKey) {
-    return this.get('store').all(typeKey);
+    // TODO: Remove once this gets updated in Ember
+    if (typeof typeKey === 'string') {
+      return this.get('store').all(typeKey);
+    } else {
+      // Passing the factory
+      return this.get('store').all(typeKey.typeKey);
+    }
   },
 
   getRecordColumnValues: function(record) {

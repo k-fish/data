@@ -31,7 +31,7 @@ test("when fetching factory from string, sets a normalized key as typeKey", func
   });
 
   equal(registry.normalize('some.post'), 'some-post', 'precond - container camelizes');
-  equal(store.modelFor("blog.post").typeKey, "blog-post", "typeKey is normalized to camelCase");
+  equal(store.modelFor('blog.post').typeKey, "blog-post", "typeKey is normalized to camelCase");
 });
 
 test("when fetching factory from string and dashing normalizer, sets a normalized key as typeKey", function() {
@@ -39,17 +39,7 @@ test("when fetching factory from string and dashing normalizer, sets a normalize
     return dasherize(camelize(key));
   });
   equal(registry.normalize('some.post'), 'some-post', 'precond - container dasherizes');
-  equal(store.modelFor("blog.post").typeKey, "blog-post", "typeKey is normalized to camelCase");
-});
-
-test("when returning passed factory, sets a normalized key as typeKey", function() {
-  var factory = { typeKey: 'some-thing' };
-  equal(store.modelFor(factory).typeKey, "some-thing", "typeKey is normalized to camelCase");
-});
-
-test("when returning passed factory without typeKey, allows it", function() {
-  var factory = { typeKey: undefined };
-  equal(store.modelFor(factory).typeKey, undefined, "typeKey is undefined");
+  equal(store.modelFor('blog.post').typeKey, "blog-post", "typeKey is normalized to camelCase");
 });
 
 test("when fetching something that doesn't exist, throws error", function() {

@@ -16,7 +16,7 @@ function Relationship(store, record, inverseKey, relationshipMeta) {
   this.inverseKeyForImplicit = this.record.constructor.typeKey + this.key;
   this.linkPromise = null;
   this.hasData = false;
-};
+}
 
 Relationship.prototype = {
   constructor: Relationship,

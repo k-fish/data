@@ -113,9 +113,9 @@ export default Ember.ArrayProxy.extend(Ember.Evented, {
     if (get(this, 'isUpdating')) { return; }
 
     var store = get(this, 'store');
-    var type = get(this, 'type');
+    var typeKey = get(this, 'type.typeKey');
 
-    return store.fetchAll(type, this);
+    return store.fetchAll(typeKey, this);
   },
 
   /**

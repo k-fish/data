@@ -16,7 +16,7 @@ export function _find(adapter, store, typeClass, id, record) {
   var typeKey = typeClass.typeKey;
   var snapshot = record._createSnapshot();
   var promise = adapter.find(store, typeClass, id, snapshot);
-  var serializer = serializerForAdapter(store, adapter, typeClass);
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#find of " + typeClass + " with id: " + id;
 
   promise = Promise.cast(promise, label);
@@ -41,9 +41,10 @@ export function _find(adapter, store, typeClass, id, record) {
 
 
 export function _findMany(adapter, store, typeClass, ids, records) {
+  var typeKey = typeClass.typeKey;
   var snapshots = Ember.A(records).invoke('_createSnapshot');
   var promise = adapter.findMany(store, typeClass, ids, snapshots);
-  var serializer = serializerForAdapter(store, adapter, typeClass);
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#findMany of " + typeClass;
 
   if (promise === undefined) {
@@ -59,15 +60,16 @@ export function _findMany(adapter, store, typeClass, ids, records) {
 
       Ember.assert("The response from a findMany must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
-      return store.pushMany(typeClass, payload);
+      return store.pushMany(typeKey, payload);
     });
   }, null, "DS: Extract payload of " + typeClass);
 }
 
 export function _findHasMany(adapter, store, record, link, relationship) {
   var snapshot = record._createSnapshot();
+  var typeKey = relationship.type.typeKey;
   var promise = adapter.findHasMany(store, snapshot, link, relationship);
-  var serializer = serializerForAdapter(store, adapter, relationship.type);
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#findHasMany of " + record + " : " + relationship.type;
 
   promise = Promise.cast(promise, label);
@@ -80,16 +82,17 @@ export function _findHasMany(adapter, store, record, link, relationship) {
 
       Ember.assert("The response from a findHasMany must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
-      var records = store.pushMany(relationship.type, payload);
+      var records = store.pushMany(typeKey, payload);
       return records;
     });
   }, null, "DS: Extract payload of " + record + " : hasMany " + relationship.type);
 }
 
 export function _findBelongsTo(adapter, store, record, link, relationship) {
+  var typeKey = relationship.type.typeKey;
   var snapshot = record._createSnapshot();
   var promise = adapter.findBelongsTo(store, snapshot, link, relationship);
-  var serializer = serializerForAdapter(store, adapter, relationship.type);
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#findBelongsTo of " + record + " : " + relationship.type;
 
   promise = Promise.cast(promise, label);
@@ -104,7 +107,7 @@ export function _findBelongsTo(adapter, store, record, link, relationship) {
         return null;
       }
 
-      var record = store.push(relationship.type, payload);
+      var record = store.push(typeKey, payload);
       return record;
     });
   }, null, "DS: Extract payload of " + record + " : " + relationship.type);
@@ -112,7 +115,8 @@ export function _findBelongsTo(adapter, store, record, link, relationship) {
 
 export function _findAll(adapter, store, typeClass, sinceToken) {
   var promise = adapter.findAll(store, typeClass, sinceToken);
-  var serializer = serializerForAdapter(store, adapter, typeClass);
+  var typeKey = typeClass.typeKey;
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#findAll of " + typeClass;
 
   promise = Promise.cast(promise, label);
@@ -124,17 +128,18 @@ export function _findAll(adapter, store, typeClass, sinceToken) {
 
       Ember.assert("The response from a findAll must be an Array, not " + Ember.inspect(payload), Ember.typeOf(payload) === 'array');
 
-      store.pushMany(typeClass, payload);
+      store.pushMany(typeKey, payload);
     });
 
     store.didUpdateAll(typeClass);
-    return store.all(typeClass);
+    return store.all(typeKey);
   }, null, "DS: Extract payload of findAll " + typeClass);
 }
 
 export function _findQuery(adapter, store, typeClass, query, recordArray) {
+  var typeKey = typeClass.typeKey;
   var promise = adapter.findQuery(store, typeClass, query, recordArray);
-  var serializer = serializerForAdapter(store, adapter, typeClass);
+  var serializer = serializerForAdapter(store, adapter, typeKey);
   var label = "DS: Handle Adapter#findQuery of " + typeClass;
 
   promise = Promise.cast(promise, label);

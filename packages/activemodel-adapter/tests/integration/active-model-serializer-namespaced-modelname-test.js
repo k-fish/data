@@ -27,7 +27,8 @@ module("integration/active_model - AMS-namespaced-model-names", {
       evilMinion:     EvilMinion,
       'evilMinions/yellowMinion':   YellowMinion,
       doomsdayDevice: DoomsdayDevice,
-      mediocreVillain: MediocreVillain
+      mediocreVillain: MediocreVillain,
+      yellowMinion: YellowMinion
     });
     env.store.modelFor('super-villain');
     env.store.modelFor('evil-minion');
