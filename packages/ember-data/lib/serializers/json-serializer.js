@@ -162,6 +162,7 @@ export default Serializer.extend({
     if (!hash) { return hash; }
 
     this.normalizeId(hash);
+    this.normalizeType(typeClass, hash);
     this.normalizeAttributes(typeClass, hash);
     this.normalizeRelationships(typeClass, hash);
 
@@ -192,6 +193,15 @@ export default Serializer.extend({
   */
   normalizePayload: function(payload) {
     return payload;
+  },
+
+  /**
+    @method normalizeType
+    @private
+  */
+  normalizeType: function(typeClass, hash) {
+    if (hash.hasOwnProperty('type')) { return; }
+    hash.type = typeClass.typeKey;
   },
 
   /**
@@ -728,10 +738,17 @@ export default Serializer.extend({
     @return {Object} json The deserialized payload
   */
   extract: function(store, typeClass, payload, id, requestType) {
-    this.extractMeta(store, typeClass, payload);
+    var meta = this.extractMeta(store, typeClass, payload);
+    var included = [];
 
     var specificExtract = "extract" + requestType.charAt(0).toUpperCase() + requestType.substr(1);
-    return this[specificExtract](store, typeClass, payload, id, requestType);
+    var data = this[specificExtract](store, typeClass, payload, id, requestType, included);
+
+    return {
+      meta: meta,
+      data: data,
+      included: included
+    };
   },
 
   /**
@@ -747,8 +764,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Array} array An array of deserialized objects
   */
-  extractFindAll: function(store, typeClass, payload, id, requestType) {
-    return this.extractArray(store, typeClass, payload, id, requestType);
+  extractFindAll: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractArray(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractFindQuery` is a hook into the extract method used when a
@@ -763,8 +780,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Array} array An array of deserialized objects
   */
-  extractFindQuery: function(store, typeClass, payload, id, requestType) {
-    return this.extractArray(store, typeClass, payload, id, requestType);
+  extractFindQuery: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractArray(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractFindMany` is a hook into the extract method used when a
@@ -779,8 +796,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Array} array An array of deserialized objects
   */
-  extractFindMany: function(store, typeClass, payload, id, requestType) {
-    return this.extractArray(store, typeClass, payload, id, requestType);
+  extractFindMany: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractArray(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractFindHasMany` is a hook into the extract method used when a
@@ -795,8 +812,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Array} array An array of deserialized objects
   */
-  extractFindHasMany: function(store, typeClass, payload, id, requestType) {
-    return this.extractArray(store, typeClass, payload, id, requestType);
+  extractFindHasMany: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractArray(store, typeClass, payload, id, requestType, included);
   },
 
   /**
@@ -812,8 +829,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractCreateRecord: function(store, typeClass, payload, id, requestType) {
-    return this.extractSave(store, typeClass, payload, id, requestType);
+  extractCreateRecord: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSave(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractUpdateRecord` is a hook into the extract method used when
@@ -828,8 +845,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractUpdateRecord: function(store, typeClass, payload, id, requestType) {
-    return this.extractSave(store, typeClass, payload, id, requestType);
+  extractUpdateRecord: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSave(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractDeleteRecord` is a hook into the extract method used when
@@ -844,8 +861,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractDeleteRecord: function(store, typeClass, payload, id, requestType) {
-    return this.extractSave(store, typeClass, payload, id, requestType);
+  extractDeleteRecord: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSave(store, typeClass, payload, id, requestType, included);
   },
 
   /**
@@ -861,8 +878,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractFind: function(store, typeClass, payload, id, requestType) {
-    return this.extractSingle(store, typeClass, payload, id, requestType);
+  extractFind: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSingle(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractFindBelongsTo` is a hook into the extract method used when
@@ -877,8 +894,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractFindBelongsTo: function(store, typeClass, payload, id, requestType) {
-    return this.extractSingle(store, typeClass, payload, id, requestType);
+  extractFindBelongsTo: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSingle(store, typeClass, payload, id, requestType, included);
   },
   /**
     `extractSave` is a hook into the extract method used when a call
@@ -893,8 +910,8 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractSave: function(store, typeClass, payload, id, requestType) {
-    return this.extractSingle(store, typeClass, payload, id, requestType);
+  extractSave: function(store, typeClass, payload, id, requestType, included) {
+    return this.extractSingle(store, typeClass, payload, id, requestType, included);
   },
 
   /**
@@ -922,7 +939,7 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Object} json The deserialized payload
   */
-  extractSingle: function(store, typeClass, payload, id, requestType) {
+  extractSingle: function(store, typeClass, payload, id, requestType, included) {
     var normalizedPayload = this.normalizePayload(payload);
     return this.normalize(typeClass, normalizedPayload);
   },
@@ -951,7 +968,7 @@ export default Serializer.extend({
     @param {String} requestType
     @return {Array} array An array of deserialized objects
   */
-  extractArray: function(store, typeClass, arrayPayload, id, requestType) {
+  extractArray: function(store, typeClass, arrayPayload, id, requestType, included) {
     var normalizedPayload = this.normalizePayload(arrayPayload);
     var serializer = this;
 
@@ -984,10 +1001,7 @@ export default Serializer.extend({
     @param {Object} payload
   */
   extractMeta: function(store, typeClass, payload) {
-    if (payload && payload.meta) {
-      store.setMetadataFor(typeClass, payload.meta);
-      delete payload.meta;
-    }
+    return payload && payload.meta;
   },
 
   /**

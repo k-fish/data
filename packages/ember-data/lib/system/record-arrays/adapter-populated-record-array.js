@@ -40,6 +40,18 @@ export default RecordArray.extend({
     var store = get(this, 'store');
     var type = get(this, 'type');
     var records = store.pushMany(type, data);
+
+    this.loadRecords(records);
+  },
+
+  /**
+    @method loadRecords
+    @private
+    @param {Array} records
+  */
+  loadRecords: function(records) {
+    var store = get(this, 'store');
+    var type = get(this, 'type');
     var meta = store.metadataFor(type);
 
     this.setProperties({

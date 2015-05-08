@@ -26,6 +26,10 @@ import {
 } from "ember-data/system/store/common";
 
 import {
+  normalizeSerializerPayload
+} from "ember-data/system/store/normalize-serializer-payload";
+
+import {
   serializerForAdapter
 } from "ember-data/system/store/serializers";
 
@@ -2031,13 +2035,16 @@ function _commit(adapter, store, operation, record) {
   promise = _guard(promise, _bind(_objectIsAlive, record));
 
   return promise.then(function(adapterPayload) {
-    var payload;
-
     store._adapterRun(function() {
+      var normalizedPayload, data;
       if (adapterPayload) {
-        payload = serializer.extract(store, type, adapterPayload, get(record, 'id'), operation);
+        var payload = serializer.extract(store, type, adapterPayload, get(record, 'id'), operation);
+        normalizedPayload = normalizeSerializerPayload(store, type, payload);
+        if (normalizedPayload && Ember.typeOf(normalizedPayload.data) === 'object') {
+          data = normalizedPayload.data;
+        }
       }
-      store.didSaveRecord(record, payload);
+      store.didSaveRecord(record, data);
     });
 
     return record;

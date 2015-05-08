@@ -171,6 +171,7 @@ var RESTSerializer = JSONSerializer.extend({
   */
   normalize: function(typeClass, hash, prop) {
     this.normalizeId(hash);
+    this.normalizeType(typeClass, hash);
     this.normalizeAttributes(typeClass, hash);
     this.normalizeRelationships(typeClass, hash);
 
@@ -261,7 +262,7 @@ var RESTSerializer = JSONSerializer.extend({
     @param {String} recordId
     @return {Object} the primary response to the original request
   */
-  extractSingle: function(store, primaryTypeClass, rawPayload, recordId) {
+  extractSingle: function(store, primaryTypeClass, rawPayload, recordId, requestType, included) {
     var payload = this.normalizePayload(rawPayload);
     var primaryTypeClassName = primaryTypeClass.typeKey;
     var primaryRecord;
@@ -307,7 +308,9 @@ var RESTSerializer = JSONSerializer.extend({
         if (isFirstCreatedRecord || isUpdatedRecord) {
           primaryRecord = hash;
         } else {
-          store.push(typeName, hash);
+          if (included) {
+            included.push(hash);
+          }
         }
       }, this);
     }
