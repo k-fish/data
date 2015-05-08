@@ -283,6 +283,13 @@ asyncTest("copies fixtures instead of passing the direct reference", function() 
     lastName: 'Gengler'
   }];
 
+  var expected = {
+    id: '1',
+    firstName: 'Katie',
+    lastName: 'Gengler',
+    type: 'person'
+  };
+
   var PersonAdapter = DS.FixtureAdapter.extend({
     find: function(store, type, id, snapshot) {
       return this._super(store, type, id).then(function(fixture) {
@@ -298,7 +305,7 @@ asyncTest("copies fixtures instead of passing the direct reference", function() 
   env.store.find('person', 1).then(function() {
     start();
     ok(Person.FIXTURES[0] !== returnedFixture, 'returnedFixture does not have object identity with defined fixture');
-    deepEqual(Person.FIXTURES[0], returnedFixture);
+    deepEqual(expected, returnedFixture);
   }, function(err) {
     ok(false, 'got error' + err);
   });

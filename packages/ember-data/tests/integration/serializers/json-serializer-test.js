@@ -430,7 +430,8 @@ test("Calling normalize should normalize the payload (only the passed keys)", fu
     id: '1',
     title: 'Ember rocks',
     author: 1,
-    inHash: 'blah'
+    inHash: 'blah',
+    type: 'post'
   });
 });
 

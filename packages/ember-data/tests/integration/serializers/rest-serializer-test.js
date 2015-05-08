@@ -76,7 +76,8 @@ test("extractArray with custom typeForRoot", function() {
   deepEqual(array, [{
     id: "1",
     name: "Umber",
-    superVillains: [1]
+    superVillains: [1],
+    type: "homePlanet"
   }]);
 
   run(function() {
@@ -350,7 +351,8 @@ test("extractArray can load secondary records of the same type without affecting
     "id": "1",
     "body": "Parent Comment",
     "root": true,
-    "children": [2, 3]
+    "children": [2, 3],
+    "type": "comment"
   }]);
 
   equal(array.length, 1, "The query count is unaffected");
@@ -441,7 +443,8 @@ test('normalizeHash normalizes specific parts of the payload', function() {
   deepEqual(array, [{
     "id": "1",
     "name": "Umber",
-    "superVillains": [1]
+    "superVillains": [1],
+    "type": "homePlanet"
   }]);
 });
 

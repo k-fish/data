@@ -114,7 +114,8 @@ test("normalize", function() {
     firstName: "Tom",
     lastName: "Dale",
     homePlanet: "123",
-    evilMinions: [1,2]
+    evilMinions: [1,2],
+    type: "superVillain"
   });
 });
 
@@ -152,7 +153,8 @@ test("extractSingle", function() {
   deepEqual(json, {
     "id": "1",
     "name": "Umber",
-    "superVillains": [1]
+    "superVillains": [1],
+    "type": "homePlanet"
   });
 
   run(function() {
@@ -178,7 +180,8 @@ test("extractArray", function() {
   deepEqual(array, [{
     "id": "1",
     "name": "Umber",
-    "superVillains": [1]
+    "superVillains": [1],
+    "type": "homePlanet"
   }]);
 
   run(function() {
@@ -248,7 +251,8 @@ test("extractPolymorphic hasMany", function() {
     "evilMinions": [{
       type: "yellowMinion",
       id: 12
-    }]
+    }],
+    "type": "mediocreVillain"
   });
 });
 
@@ -273,7 +277,8 @@ test("extractPolymorphic", function() {
     "evilMinion": {
       type: "yellowMinion",
       id: 12
-    }
+    },
+    "type": "doomsdayDevice"
   });
 });
 
@@ -290,7 +295,8 @@ test("extractPolymorphic when the related data is not specified", function() {
   deepEqual(json, {
     "id": 1,
     "name": "DeathRay",
-    "evilMinion": undefined
+    "evilMinion": undefined,
+    "type": "doomsdayDevice"
   });
 });
 
@@ -306,7 +312,8 @@ test("extractPolymorphic hasMany when the related data is not specified", functi
   deepEqual(json, {
     "id": 1,
     "name": "Dr Horrible",
-    "evilMinions": undefined
+    "evilMinions": undefined,
+    "type": "mediocreVillain"
   });
 });
 
@@ -322,7 +329,8 @@ test("extractPolymorphic does not break hasMany relationships", function() {
   deepEqual(json, {
     "id": 1,
     "name": "Dr. Evil",
-    "evilMinions": []
+    "evilMinions": [],
+    "type": "mediocreVillain"
   });
 });
 

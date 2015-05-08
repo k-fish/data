@@ -102,7 +102,8 @@ test("extractSingle with embedded objects", function() {
   deepEqual(json, {
     id: "1",
     name: "Umber",
-    villains: ["1"]
+    villains: ["1"],
+    type: "homePlanet"
   });
   run(function() {
     env.store.find("superVillain", 1).then(function(minion) {
@@ -149,7 +150,8 @@ test("extractSingle with embedded objects inside embedded objects", function() {
   deepEqual(json, {
     id: "1",
     name: "Umber",
-    villains: ["1"]
+    villains: ["1"],
+    type: "homePlanet"
   });
   run(function() {
     env.store.find("superVillain", 1).then(function(villain) {
@@ -198,7 +200,8 @@ test("extractSingle with embedded objects of same type", function() {
     id: "1",
     body: "Hello",
     root: true,
-    children: ["2", "3"]
+    children: ["2", "3"],
+    type: "comment"
   }, "Primary record was correct");
   equal(env.store.recordForId("comment", "2").get("body"), "World", "Secondary records found in the store");
   equal(env.store.recordForId("comment", "3").get("body"), "Foo", "Secondary records found in the store");
@@ -244,7 +247,8 @@ test("extractSingle with embedded objects inside embedded objects of same type",
     id: "1",
     body: "Hello",
     root: true,
-    children: ["2", "3"]
+    children: ["2", "3"],
+    type: "comment"
   }, "Primary record was correct");
   equal(env.store.recordForId("comment", "2").get("body"), "World", "Secondary records found in the store");
   equal(env.store.recordForId("comment", "3").get("body"), "Foo", "Secondary records found in the store");
@@ -296,7 +300,8 @@ test("extractSingle with embedded objects of same type, but from separate attrib
     id: "1",
     name: "Earth",
     villains: ["1", "3"],
-    reformedVillains: ["2", "4"]
+    reformedVillains: ["2", "4"],
+    type: "homePlanet"
   }, "Primary hash was correct");
 
   equal(env.store.recordForId("superVillain", "1").get("firstName"), "Tom", "Secondary records found in the store");
@@ -335,7 +340,8 @@ test("extractArray with embedded objects", function() {
   deepEqual(array, [{
     id: "1",
     name: "Umber",
-    villains: ["1"]
+    villains: ["1"],
+    type: "homePlanet"
   }]);
 
   run(function() {
@@ -379,7 +385,8 @@ test("extractArray with embedded objects with custom primary key", function() {
   deepEqual(array, [{
     id: "1",
     name: "Umber",
-    villains: ["1"]
+    villains: ["1"],
+    type: "homePlanet"
   }]);
 
   run(function() {
@@ -424,7 +431,8 @@ test("extractArray with embedded objects with identical relationship and attribu
   deepEqual(array, [{
     id: "1",
     name: "Umber",
-    villains: ["1"]
+    villains: ["1"],
+    type: "homePlanet"
   }]);
 
   run(function() {
@@ -470,7 +478,8 @@ test("extractArray with embedded objects of same type as primary type", function
     id: "1",
     body: "Hello",
     root: true,
-    children: ["2", "3"]
+    children: ["2", "3"],
+    type: "comment"
   }], "Primary array is correct");
 
   equal(env.store.recordForId("comment", "2").get("body"), "World", "Secondary record found in the store");
@@ -537,12 +546,14 @@ test("extractArray with embedded objects of same type, but from separate attribu
     id: "1",
     name: "Earth",
     villains: ["1", "3"],
-    reformedVillains: ["2", "4"]
+    reformedVillains: ["2", "4"],
+    type: "homePlanet"
   },{
     id: "2",
     name: "Mars",
     villains: ["1", "3"],
-    reformedVillains: ["5", "6"]
+    reformedVillains: ["5", "6"],
+    type: "homePlanet"
   }], "Primary array was correct");
 
   equal(env.store.recordForId("superVillain", "1").get("firstName"), "Tom", "Secondary records found in the store");
@@ -734,7 +745,8 @@ test("extractSingle with embedded object (belongsTo relationship)", function() {
     "homePlanet": "123",
     "evilMinions": ["1", "2", "3"],
     "secretLab": "101",
-    "secretWeapons": []
+    "secretWeapons": [],
+    "type": "superVillain"
   });
 
   run(function() {
@@ -1103,7 +1115,8 @@ test("extractSingle with multiply-nested belongsTo", function() {
   deepEqual(json, {
     id: "1",
     name: "Alex",
-    superVillain: "1"
+    superVillain: "1",
+    type: "evilMinion"
   }, "Primary hash was correct");
 
   equal(env.store.recordForId("superVillain", "1").get("firstName"), "Tom", "Secondary record, Tom, found in the steore");
@@ -1156,7 +1169,8 @@ test("extractSingle with polymorphic hasMany", function() {
     secretWeapons: [
       { id: "1", type: "lightSaber" },
       { id: "1", type: "secretWeapon" }
-    ]
+    ],
+    type: "superVillain"
   }, "Primary hash was correct");
 
   equal(env.store.recordForId("secretWeapon", "1").get("name"), "The Death Star", "Embedded polymorphic SecretWeapon found");
@@ -1204,7 +1218,8 @@ test("extractSingle with polymorphic belongsTo", function() {
     firstName: "Tom",
     lastName: "Dale",
     secretLab: "1",
-    secretLabType: "batCave"
+    secretLabType: "batCave",
+    type: "superVillain"
   }, "Primary has was correct");
 
   equal(env.store.recordForId("batCave", "1").get("infiltrated"), true, "Embedded polymorphic BatCave was found");
@@ -1285,7 +1300,8 @@ test("normalize with custom belongsTo primary key", function() {
   deepEqual(json, {
     id: "1",
     name: "Alex",
-    superVillain: "1"
+    superVillain: "1",
+    type: "evilMinion"
   }, "Primary hash was correct");
 
   equal(env.store.recordForId("superVillain", "1").get("firstName"), "Tom", "Secondary record, Tom, found in the steore");

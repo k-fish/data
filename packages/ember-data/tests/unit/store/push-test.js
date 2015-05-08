@@ -35,6 +35,7 @@ module("unit/store/push - DS.Store#push", {
       person: Person,
       "phone-number": PhoneNumber
     });
+    env.replaceContainerNormalize(Ember.String.dasherize);
 
     store = env.store;
 

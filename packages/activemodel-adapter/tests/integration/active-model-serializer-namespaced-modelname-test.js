@@ -92,7 +92,8 @@ test("extractPolymorphic hasMany", function() {
     "evilMinions": [{
       type: "evilMinions/yellowMinion",
       id: 12
-    }]
+    }],
+    "type": "mediocreVillain"
   });
 });
 
@@ -113,6 +114,7 @@ test("extractPolymorphic", function() {
     "evilMinion": {
       type: "evilMinions/yellowMinion",
       id: 12
-    }
+    },
+    "type": "doomsdayDevice"
   });
 });
